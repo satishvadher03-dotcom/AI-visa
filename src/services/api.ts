@@ -42,7 +42,14 @@ export async function apiRequest<T = any>(
       headers.set('Content-Type', 'application/json');
     }
 
-    const response = await fetch(endpoint, {
+    const baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || '';
+    const requestUrl = endpoint.startsWith('http://') || endpoint.startsWith('https://')
+      ? endpoint
+      : baseUrl
+      ? `${baseUrl.replace(/\/+$/, '')}/${endpoint.replace(/^\/+/, '')}`
+      : endpoint;
+
+    const response = await fetch(requestUrl, {
       ...options,
       credentials: 'include',
       headers,

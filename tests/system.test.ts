@@ -180,12 +180,12 @@ async function runTests() {
   });
 
   console.log(`\nTest Results: ${passed} passed, ${failed} failed.`);
-  if (failed > 0) {
-    process.exit(1);
-  }
+  await prisma.$disconnect();
+  process.exit(failed > 0 ? 1 : 0);
 }
 
-runTests().catch((e) => {
+runTests().catch(async (e) => {
   console.error('Test suite error:', e);
+  await prisma.$disconnect().catch(() => {});
   process.exit(1);
 });
