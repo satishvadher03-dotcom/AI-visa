@@ -173,8 +173,8 @@ User preferred language: ${preferredLang} (${preferredLang === 'gu' ? 'Gujarati'
       preferredLang === 'gu' ? 'Gujarati' : preferredLang === 'hi' ? 'Hindi' : 'English'
     }. Include the official government portal URL where applicable.`;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
+    const apiCallPromise = ai.models.generateContent({
+      model: 'gemini-2.5-flash',
       contents: fullPrompt,
       config: {
         systemInstruction: systemPrompt,
@@ -182,6 +182,11 @@ User preferred language: ${preferredLang} (${preferredLang === 'gu' ? 'Gujarati'
       },
     });
 
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('AI assistant response timeout after 8000ms')), 8000)
+    );
+
+    const response = await Promise.race([apiCallPromise, timeoutPromise]);
     const reply = response.text || 'Thank you for your inquiry. Please consult our official visa listing or book a consultation.';
 
     return {
