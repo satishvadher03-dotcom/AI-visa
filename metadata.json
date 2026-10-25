@@ -1,0 +1,6 @@
+{
+  "name": "AuraVisa Global",
+  "description": "AI e-Visa Consultancy and Case Management System with multi-language AI assistant, eligibility evaluator, and private document vault.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
